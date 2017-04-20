@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // launching facebook comments activity
+                /* launching facebook comments activity*/
                 Intent intent = new Intent(MainActivity.this, FbCommentsActivity.class);
 
                 // passing the article url
