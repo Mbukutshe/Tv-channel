@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/About"
+        android:id="@+id/Login"
         android:orderInCategory="100"
-        android:title="About Us"
+        android:title="LogIn"
         app:showAsAction="never"/>
 
     <item

@@ -3,31 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:orientation="vertical"
+    android:background="@drawable/gradient_bg"
+    android:padding="10dp">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <!-- title -->
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="25dp">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/title_out"
+            android:gravity="center"
+            android:layout_above="@+id/messageslayout"
+            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_weight="1" />
+
     </LinearLayout>
 
 
     <!-- Messages -->
     <LinearLayout
         android:orientation="horizontal"
+        android:id="@+id/messageslayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="25dp">
+
 
         <TextView
             android:id="@+id/messages"
@@ -36,6 +47,27 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+
+</LinearLayout>
+
+    <!-- Presenter -->
+    <TextView
+        android:id="@+id/presenter"
+        android:text="Presenter: Thoma Mlambo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/poster"/>
+
+
+    <!-- Age -->
+    <TextView
+        android:id="@+id/age"
+        android:text="Restriction: PNG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/date"/>
 
     <!-- Sender -->
     <TextView

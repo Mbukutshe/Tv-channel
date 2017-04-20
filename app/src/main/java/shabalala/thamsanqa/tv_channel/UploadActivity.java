@@ -1,6 +1,8 @@
 package shabalala.thamsanqa.tv_channel;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -53,7 +55,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private int mYear, mMonth, mDay, mHour, mMinute, eHour , eMinute;
 
         private  RequestQueue requestQueue;
-        private  String insertUrl = "http://thammy202.comli.com/insertStudent.php";
+        private  String insertUrl = "http://thammy202.comli.com/addEmpTv.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle("Channel 808");
+        toolbar.setSubtitle("Scheduling");
 
         Time = (EditText)findViewById(R.id.Post_Time);
         Date = (EditText)findViewById(R.id.Post_Date);
@@ -155,7 +159,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         if (v == btnFinalUpload) {
 
-            Toast.makeText(this,"Hour: " + mHour + "",Toast.LENGTH_LONG ).show();
+            Toast.makeText(this,"Date: " + Date.getText().toString() + "",Toast.LENGTH_LONG ).show();
 
             StringRequest request = new StringRequest(Request.Method.POST, insertUrl, new Response.Listener<String>() {
                 @Override
@@ -174,9 +178,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String,String> parameters  = new HashMap<String, String>();
                     parameters.put("title",Title.getText().toString());
-                    parameters.put("time",mHour+ ":"+ mMinute+"" +" - " +eHour+":" + eMinute+"");
+                    parameters.put("time",Time.getText().toString() +" - " + TimeEnd.getText().toString());
                     parameters.put("description",Description.getText().toString());
-                    parameters.put("date",mDay+"" + mMonth+"" + mYear+"");
+                    parameters.put("date",Date.getText().toString());
 
                     return parameters;
                 }
@@ -188,7 +192,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.logout_manu, menu);
         return true;
     }
 
@@ -197,15 +201,36 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (item.getItemId()) {
 
-            case R.id.action_back:
+            case R.id.action_back_out:
                 startActivity(new Intent(UploadActivity.this,MainActivity.class));
+                break;
+
+            case R.id.LogOut:
+                startActivity(new Intent(UploadActivity.this,MainActivity.class));
+                finish();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Closing Activity")
+                .setMessage("Are you sure you want to admin CPanel ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
 
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 
 
 }

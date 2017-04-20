@@ -3,6 +3,7 @@ package shabalala.thamsanqa.tv_channel;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,12 +23,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.webkit.WebView;
 
-public class MainActivity extends AppCompatActivity implements ListView.OnItemClickListener {
+
+public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ListView listView;
     private String JSON_STRING;
+
+    // This url contains the content of the article excluding web page's
+    // header, footer, title, comments
+    private static String url = "http://api.androidhive.info/facebook/firebase_analytics.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +45,27 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle("Channel 808");
         toolbar.setSubtitle("Daily Schedule");
 
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // launching facebook comments activity
+                Intent intent = new Intent(MainActivity.this, FbCommentsActivity.class);
+
+                // passing the article url
+                intent.putExtra("url", "http://www.androidhive.info/2016/06/android-firebase-integrate-analytics/");
+                startActivity(intent);
+            }
+        });
+
+
+
+        getJSON();
     }
 
     private void showSchedule(){
@@ -52,23 +77,21 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
             JSONArray result = jsonObject.getJSONArray(Config.TAG_JSON_ARRAY);
 
             for(int i = 0; i<result.length(); i++){
-
                 JSONObject jo = result.getJSONObject(i);
-
                 String id = jo.getString(Config.TAG_ID);
-                String date = jo.getString(Config.TAG_DATE);
+                String name = jo.getString(Config.TAG_NAME);
+                String desg = jo.getString(Config.TAG_DESG);
+                String sal = jo.getString(Config.TAG_SAL);
                 String title = jo.getString(Config.TAG_TITLE);
-                String time = jo.getString(Config.TAG_TIME);
-                String description = jo.getString(Config.TAG_DESC);
 
 
-                HashMap<String,String> show = new HashMap<>();
-                show.put(Config.TAG_ID,id);
-                show.put(Config.TAG_DATE,date);
-                show.put(Config.TAG_TITLE,title);
-                show.put(Config.TAG_TIME,time);
-                show.put(Config.TAG_DESC,description);
-                list.add(show);
+                HashMap<String,String> employees = new HashMap<>();
+                employees.put(Config.TAG_ID,id);
+                employees.put(Config.TAG_NAME,name);
+                employees.put(Config.TAG_DESG,desg);
+                employees.put(Config.TAG_SAL,sal);
+                employees.put(Config.TAG_TITLE,title);
+                list.add(employees);
             }
 
         } catch (JSONException e) {
@@ -77,17 +100,14 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
 
         ListAdapter adapter = new SimpleAdapter(
                 MainActivity.this, list, R.layout.mylist,
-                new String[]{Config.TAG_TITLE,Config.TAG_DESC,Config.TAG_DATE,Config.TAG_TIME},
-                new int[]{R.id.title,R.id.messages,R.id.poster,R.id.date});
+                new String[]{Config.TAG_TITLE,Config.TAG_NAME,Config.TAG_DESG,Config.TAG_SAL},
+                new int[]{R.id.title_out,R.id.messages,R.id.poster,R.id.date});
 
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(this);
-        getJSON();
     }
 
     private void getJSON(){
-        class GetJSON extends AsyncTask<Void,Void,String> {
+        class GetJSON extends AsyncTask<Void,Void,String>{
 
             ProgressDialog loading;
             @Override
@@ -115,14 +135,6 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         gj.execute();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // Intent intent = new Intent(this, ViewEmployee.class);
-        //  HashMap<String,String> map =(HashMap)parent.getItemAtPosition(position);
-        //  String empId = map.get(Config.TAG_ID).toString();
-        //  intent.putExtra(Config.SHOW_ID,empId);
-        // startActivity(intent);
-    }
 
 
     @Override
@@ -135,15 +147,11 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-
-            case R.id.About:
-                startActivity(new Intent(MainActivity.this,UploadActivity.class));
-                Toast.makeText(this,"About Profile",Toast.LENGTH_LONG).show();
+            case R.id.Login:
+                startActivity(new Intent(MainActivity.this,LoginActivity.class));
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
 }
